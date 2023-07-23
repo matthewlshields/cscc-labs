@@ -1,5 +1,3 @@
-
-
 # FOR TESTING
 sample_text = '''
 Marley was dead: to begin with. There is no doubt whatever about that. The register of his burial was signed by the clergyman, the clerk, the undertaker, and the chief mourner. Scrooge signed it: and Scrooge's name was good upon 'Change, for anything he chose to put his hand to. Old Marley was as dead as a door-nail.
@@ -10,40 +8,69 @@ Scrooge knew he was dead? Of course he did. How could it be otherwise? Scrooge a
 
 The mention of Marley's funeral brings me back to the point I started from. There is no doubt that Marley was dead. This must be distinctly understood, or nothing wonderful can come of the story I am going to relate. If we were not perfectly convinced that Hamlet's Father died before the play began, there would be nothing more remarkable in his taking a stroll at night, in an easterly wind, upon his own ramparts, than there would be in any other middle-aged gentleman rashly turning out after dark in a breezy spot—say Saint Paul's Churchyard for instance—literally to astonish his son's weak mind.
 '''
+
+
 # Open text file
 
 
-# Count the total number of words
-def total_words(text: str):
+# Remove punctuation
+def remove_special_characters(text_list: list, special_characters='.;:?!,\''):
+    cleaned_words = []
+    for word in text_list:
+        cleaned_words.append(word.strip(special_characters))
+    return cleaned_words
+
+# Exclude words
+def remove_common_words(text_list: list, excluded_words: list, convert_to_lower_case=True):
+    working_list = []
+
+    if convert_to_lower_case:
+        for word in text_list:
+            working_list.append(str(word).lower())
+    else:
+        working_list = text_list
+
+    if excluded_words is not None:
+        for word in working_list:
+            if word in excluded_words:
+                working_list.remove(word)
+
+    return working_list
+
+
+def text_scrubber(text: str, special_characters='', excluded_words=None):
     working = str(text)
-    working2 = []
-    special_characters = '.;:?!,\''
     the_words = working.split()
-    for word in the_words:
-        working2.append(word.strip(special_characters))
-    return len(working2)
+    the_words = remove_special_characters(the_words)
+    the_words = remove_common_words(the_words, excluded_words)
+    return the_words
+
+
+# Count the total number of words
+def total_words(text):
+    return len(text)
 
 
 # Dictionary of count by word
-def word_counter(text: str):
-    working = str(text)
-    working2 = []
-    special_characters = '.;:?!,\''
-    the_words = working.split()
-    for word in the_words:
-        working2.append(word.strip(special_characters))
-
-    working3 = set(working2)
-    working3 = list(working3)
-    working3.sort()
+def word_counter(text):
+    unique_words = set(text)
+    unique_words = list(unique_words)
+    unique_words.sort()
     working4 = {}
-    for word in working3:
-        working4[word] = working2.count(word)
+    for word in unique_words:
+        working4[word] = text.count(word)
     return working4
 
-# Dictionary of proportion by work
 
-# Exclude words
+# Dictionary of proportion by work
+def word_proportion(text):
+    divisor = total_words(text)
+    the_counted_words = word_counter(text)
+    working_list = {}
+    for word in the_counted_words:
+        working_list[word] = round(the_counted_words[word] / divisor, 4)
+    return working_list
+
 
 # Accept a user’s query of whether a word exists in the text. If the word search finds a word, state
 # the word, the number of times it appears, and the proportion of the total words made up by
@@ -62,7 +89,9 @@ def word_counter(text: str):
 
 
 if __name__ == '__main__':
+    common_words = ['a', 'an', 'and']
     print(sample_text)
-    print("Total words:", total_words(sample_text))
-    print("Count per word:", word_counter(sample_text))
-
+    cleaned_text = text_scrubber(sample_text, excluded_words=common_words)
+    print("Total words:", total_words(cleaned_text))
+    print("Count per word:", word_counter(cleaned_text))
+    print("Word proportion:", word_proportion(cleaned_text))
