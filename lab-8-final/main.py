@@ -79,15 +79,31 @@ def word_proportion(text):
 def word_finder(word_to_find: str, text: list):
     try:
         text.index(word_to_find)
-        print("The following word was found:", word_to_find)
+        print(f'The word "{word_to_find}" was found.')
+        print(f'It occurs {word_counter(text).get(word_to_find)} times.')
+        print(f'That is a proportion of {word_proportion(text).get(word_to_find)} of the total words')
+        print("")
     except ValueError:
-        print("The following word was not found:", word_to_find)
+        print(f'The word "{word_to_find}" was not found.')
+
 
 # List top X words
+def top_words(text: list, show_top_number: int):
+    word_count = word_counter(text)
+
+    sorted_by_occurrence = sorted(word_count.items(), key=lambda item_tuple: item_tuple[1], reverse=True)
+    sorted_by_occurrence = dict(sorted_by_occurrence)
+
+    print(sorted_by_occurrence)
+
+    counter = 0
+    while counter < show_top_number:
+        keys = list(sorted_by_occurrence.keys())
+        word_finder(keys[counter], text)
+        counter += 1
+
 
 # Document modification
-
-# List positions of provided word
 
 # Replace a word. One or all instances
 
@@ -103,5 +119,8 @@ if __name__ == '__main__':
     print("Word proportion:", word_proportion(cleaned_text))
     print('')
 
-    word_finder("ancestors", cleaned_text) # Should be found
+    word_finder("ancestors", cleaned_text) # Should be found once
+    word_finder("marley", cleaned_text)  # Should be found multiple times
     word_finder("lightsaber", cleaned_text) # Should not be found
+
+    top_words(cleaned_text, 5)
