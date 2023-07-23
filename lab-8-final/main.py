@@ -76,6 +76,12 @@ def word_proportion(text):
 # the word, the number of times it appears, and the proportion of the total words made up by
 # that word. If the word does not find the word, return some information that the word was not
 # found in the text.
+def word_finder(word_to_find: str, text: list):
+    try:
+        text.index(word_to_find)
+        print("The following word was found:", word_to_find)
+    except ValueError:
+        print("The following word was not found:", word_to_find)
 
 # List top X words
 
@@ -95,3 +101,7 @@ if __name__ == '__main__':
     print("Total words:", total_words(cleaned_text))
     print("Count per word:", word_counter(cleaned_text))
     print("Word proportion:", word_proportion(cleaned_text))
+    print('')
+
+    word_finder("ancestors", cleaned_text) # Should be found
+    word_finder("lightsaber", cleaned_text) # Should not be found
