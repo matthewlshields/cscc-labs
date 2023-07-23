@@ -104,8 +104,28 @@ def top_words(text: list, show_top_number: int):
 
 
 # Document modification
+def find_occurrences(word_to_find: str, text: str):
+    word_indexes = []
+    if word_to_find in text:
+        current_index = 0
+        while current_index < len(text):
+            found_index = text.find(word_to_find, current_index)
+
+            if found_index == current_index:
+                word_indexes.append(current_index)
+
+            current_index += 1
+
+    return word_indexes
+
 
 # Replace a word. One or all instances
+def replace_occurrences(current_word: str, new_word: str, text: str, instance_to_replace=1, replace_all=False):
+    word_indexes = find_occurrences(current_word, text)
+
+    if replace_all:
+        return text.replace(current_word, new_word)
+    # STILL WORKING ON THIS
 
 # Save as new file. Do not allow to overwrite.
 
@@ -124,3 +144,5 @@ if __name__ == '__main__':
     word_finder("lightsaber", cleaned_text) # Should not be found
 
     top_words(cleaned_text, 5)
+
+    print(find_occurrences("Scrooge", sample_text))
