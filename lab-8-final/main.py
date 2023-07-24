@@ -1,3 +1,5 @@
+import word_replacement as replacer
+
 # FOR TESTING
 sample_text = '''
 Marley was dead: to begin with. There is no doubt whatever about that. The register of his burial was signed by the clergyman, the clerk, the undertaker, and the chief mourner. Scrooge signed it: and Scrooge's name was good upon 'Change, for anything he chose to put his hand to. Old Marley was as dead as a door-nail.
@@ -19,6 +21,7 @@ def remove_special_characters(text_list: list, special_characters='.;:?!,\''):
     for word in text_list:
         cleaned_words.append(word.strip(special_characters))
     return cleaned_words
+
 
 # Exclude words
 def remove_common_words(text_list: list, excluded_words: list, convert_to_lower_case=True):
@@ -104,32 +107,7 @@ def top_words(text: list, show_top_number: int):
 
 
 # Document modification
-def find_occurrences(word_to_find: str, text: str):
-    word_indexes = []
-    if word_to_find in text:
-        current_index = 0
-        while current_index < len(text):
-            found_index = text.find(word_to_find, current_index)
 
-            if found_index == current_index:
-                word_indexes.append(current_index)
-
-            current_index += 1
-
-    return word_indexes
-
-
-# Replace a word. One or all instances
-def replace_occurrences(current_word: str, new_word: str, text: str, index_to_replace=-1, replace_all=False):
-
-    if replace_all:
-        return text.replace(current_word, new_word)
-
-    if index_to_replace > -1:
-        updated_text = text[:index_to_replace] + new_word + text[index_to_replace + len(current_word):]
-        return updated_text
-
-    return text
 
 
 # Save as new file. Do not allow to overwrite.
@@ -150,10 +128,10 @@ if __name__ == '__main__':
 
     top_words(cleaned_text, 5)
 
-    print("Word indexes: ", find_occurrences("Scrooge", sample_text))  # Get the indexes
+    print("Word indexes: ", replacer.find_occurrences("Scrooge", sample_text))  # Get the indexes
     print('')
-    print(replace_occurrences("Scrooge", "Cratchit", sample_text, replace_all=True))  # Replace all
+    print(replacer.replace_occurrences("Scrooge", "Cratchit", sample_text, replace_all=True))  # Replace all
     print('')
-    print(replace_occurrences("Scrooge", "Cratchit", sample_text, index_to_replace=201))  # Replace the second
+    print(replacer.replace_occurrences("Scrooge", "Cratchit", sample_text, index_to_replace=201))  # Replace the second
     print('')
-    print(replace_occurrences("Scrooge", "Cratchit", sample_text))  # Nothing to replace, so return the same text
+    print(replacer.replace_occurrences("Scrooge", "Cratchit", sample_text))  # Nothing to replace, so return the same text
