@@ -120,12 +120,17 @@ def find_occurrences(word_to_find: str, text: str):
 
 
 # Replace a word. One or all instances
-def replace_occurrences(current_word: str, new_word: str, text: str, instance_to_replace=1, replace_all=False):
-    word_indexes = find_occurrences(current_word, text)
+def replace_occurrences(current_word: str, new_word: str, text: str, index_to_replace=-1, replace_all=False):
 
     if replace_all:
         return text.replace(current_word, new_word)
-    # STILL WORKING ON THIS
+
+    if index_to_replace > -1:
+        updated_text = text[:index_to_replace] + new_word + text[index_to_replace + len(current_word):]
+        return updated_text
+
+    return text
+
 
 # Save as new file. Do not allow to overwrite.
 
@@ -139,10 +144,16 @@ if __name__ == '__main__':
     print("Word proportion:", word_proportion(cleaned_text))
     print('')
 
-    word_finder("ancestors", cleaned_text) # Should be found once
+    word_finder("ancestors", cleaned_text)  # Should be found once
     word_finder("marley", cleaned_text)  # Should be found multiple times
-    word_finder("lightsaber", cleaned_text) # Should not be found
+    word_finder("lightsaber", cleaned_text)  # Should not be found
 
     top_words(cleaned_text, 5)
 
-    print(find_occurrences("Scrooge", sample_text))
+    print("Word indexes: ", find_occurrences("Scrooge", sample_text))  # Get the indexes
+    print('')
+    print(replace_occurrences("Scrooge", "Cratchit", sample_text, replace_all=True))  # Replace all
+    print('')
+    print(replace_occurrences("Scrooge", "Cratchit", sample_text, index_to_replace=201))  # Replace the second
+    print('')
+    print(replace_occurrences("Scrooge", "Cratchit", sample_text))  # Nothing to replace, so return the same text
