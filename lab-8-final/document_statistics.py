@@ -64,7 +64,7 @@ def word_proportion(text):
 # found in the text.
 def word_finder(word_to_find: str, text: list):
     try:
-        text.index(word_to_find)
+        text.index(word_to_find.lower())
         print(f'The word "{word_to_find}" was found.')
         print(f'It occurs {word_counter(text).get(word_to_find)} times.')
         print(f'That is a proportion of {word_proportion(text).get(word_to_find)} of the total words')

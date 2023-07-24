@@ -7,15 +7,17 @@ class FileEditor:
     def __init__(self):
         self.file_contents = ''
         self.excluded_words = []
+        self.scrubbed_text = []
 
-    def nothon(self):
-        return
 
     # Open text file
     def load_file(self, file: str):
         with open(file, "r") as text_file:
             file_contents = text_file.read()
             self.file_contents = file_contents
+            self.scrubbed_text = stats.text_scrubber(self.file_contents, excluded_words=self.excluded_words)
+            print("Text file has been loaded.")
+
 
     def save_file(file: str, contents: str):
         with open(file, "w") as text_file:
@@ -24,15 +26,15 @@ class FileEditor:
 
 def display_main_menu():
     menu = '''
-    Hello. Select an option
+Hello. Select an option
+
+    L. Load a text document
+    E. Exclude common words
+    C. Display the total word count
+    F. Find a word
+    T. Display the top n words
+    Q. Quit
     
-        L. Load a text document
-        E. Exclude common words
-        C. Display the total word count
-        F. Find a word
-        T. Display the top n words
-        Q. Quit
-        
     '''
     print(menu)
 
@@ -52,9 +54,15 @@ def process_menu_selection(selection: str):
                 print("Please load a text file")
                 return
 
-            total_words = stats.total_words(fe.file_contents)
+            total_words = stats.total_words(fe.scrubbed_text)
             print(f"The file contains {total_words} words")
+        case 'F':
+            word_to_find = input("Enter a word to find: ")
+            if (fe.file_contents is None) | (fe.file_contents == ''):
+                print("Please load a text file")
+                return
 
+            stats.word_finder(word_to_find, fe.scrubbed_text)
         case 'Q':
             print("Have a nice day! Good bye!")
             return 'q'
