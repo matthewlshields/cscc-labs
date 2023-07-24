@@ -40,32 +40,35 @@ Hello. Select an option
 
 
 def process_menu_selection(selection: str):
-    match selection:
-        case 'L':
-            file_path = input("Enter a file name: ")
-            fe.load_file(file_path)
-            # print(fe.file_contents)
-        case 'E':
-            words_to_exclude = input("Enter a comma separated list of words to exclude: ")
-            fe.excluded_words = str(words_to_exclude).split()
-            print(fe.excluded_words)
-        case 'C':
-            if (fe.file_contents is None) | (fe.file_contents == ''):
-                print("Please load a text file")
-                return
 
-            total_words = stats.total_words(fe.scrubbed_text)
-            print(f"The file contains {total_words} words")
-        case 'F':
-            word_to_find = input("Enter a word to find: ")
-            if (fe.file_contents is None) | (fe.file_contents == ''):
-                print("Please load a text file")
-                return
+    if selection == 'L':
+        file_path = input("Enter a file name: ")
+        fe.load_file(file_path)
+        # print(fe.file_contents)
+    if selection == 'E':
+        words_to_exclude = input("Enter a comma separated list of words to exclude: ")
+        fe.excluded_words = str(words_to_exclude).split()
+        print(fe.excluded_words)
+    if selection == 'C':
+        if (fe.file_contents is None) | (fe.file_contents == ''):
+            print("Please load a text file")
+            return
 
-            stats.word_finder(word_to_find, fe.scrubbed_text)
-        case 'Q':
-            print("Have a nice day! Good bye!")
-            return 'q'
+        total_words = stats.total_words(fe.scrubbed_text)
+        print(f"The file contains {total_words} words")
+    if selection == 'F':
+        word_to_find = input("Enter a word to find: ")
+        if (fe.file_contents is None) | (fe.file_contents == ''):
+            print("Please load a text file")
+            return
+
+        stats.word_finder(word_to_find, fe.scrubbed_text)
+    if selection == 'T':
+        top_n = input("Enter the top n number of words to be seen: ")
+        stats.top_words(fe.scrubbed_text, int(top_n))
+    if selection == 'Q':
+        print("Have a nice day! Good bye!")
+        return 'q'
 
 
 if __name__ == '__main__':
