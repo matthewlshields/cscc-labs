@@ -80,8 +80,6 @@ def top_words(text: list, show_top_number: int):
     sorted_by_occurrence = sorted(word_count.items(), key=lambda item_tuple: item_tuple[1], reverse=True)
     sorted_by_occurrence = dict(sorted_by_occurrence)
 
-    print(sorted_by_occurrence)
-
     counter = 0
     while counter < show_top_number:
         keys = list(sorted_by_occurrence.keys())

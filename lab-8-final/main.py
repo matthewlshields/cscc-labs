@@ -9,7 +9,6 @@ class FileEditor:
         self.excluded_words = []
         self.scrubbed_text = []
 
-
     # Open text file
     def load_file(self, file: str):
         with open(file, "r") as text_file:
@@ -18,8 +17,7 @@ class FileEditor:
             self.scrubbed_text = stats.text_scrubber(self.file_contents, excluded_words=self.excluded_words)
             print("Text file has been loaded.")
 
-
-    def save_file(file: str, contents: str):
+    def save_file(self, file: str, contents: str):
         with open(file, "w") as text_file:
             text_file.write(contents)
 
@@ -33,6 +31,7 @@ Hello. Select an option
     C. Display the total word count
     F. Find a word
     T. Display the top n words
+    R. Find and replace text
     Q. Quit
     
     '''
@@ -66,10 +65,38 @@ def process_menu_selection(selection: str):
     if selection == 'T':
         top_n = input("Enter the top n number of words to be seen: ")
         stats.top_words(fe.scrubbed_text, int(top_n))
+    if selection == 'R':
+        process_sub_menu_fr()
     if selection == 'Q':
         print("Have a nice day! Good bye!")
         return 'q'
 
+
+def process_sub_menu_fr():
+    # Get the name of the new file
+
+    # Get the word to replace
+    old_word = input("What word would you like to replace? ")
+
+    # Display positions
+    occurrences_of_old_word = replacer.find_occurrences(old_word, fe.file_contents)
+    print(f"The word {old_word} occurs at the following locations: {occurrences_of_old_word}")
+
+    # Get choice
+    new_word = input("What is the new word? ")
+
+    # Replace
+    location = input("Which location would you like to replace? 'All' or enter a location: ")
+
+    updated_text = ''
+    if location.lower() == 'all':
+        updated_text = replacer.replace_occurrences(old_word, new_word, fe.file_contents, replace_all=True)
+    else:
+        updated_text = replacer.replace_occurrences(old_word, new_word, fe.file_contents, int(location))
+
+    # Save
+    new_file = input("Enter a new file name: ")
+    fe.save_file(new_file, updated_text)
 
 if __name__ == '__main__':
     fe = FileEditor()
